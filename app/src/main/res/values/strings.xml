@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">MultiScreenStarter</string>
+    <string name="temperature_display">%.1f°C</string>
+
+    <!-- Navigation Tabs -->
+    <string name="tab_home">Home</string>
+    <string name="tab_sensors">Sensoren</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Top Bar Titles -->
+    <string name="title_home">Meine Starter App</string>
+    <string name="title_sensors">Live Sensor-Daten</string>
+    <string name="title_settings">Konfiguration</string>
+    <string name="title_step1">Schritt 1</string>
+    <string name="title_step2">Schritt 2</string>
+    <string name="title_step3">Schritt 3</string>
+
+    <!-- Home Screen -->
+    <string name="home_welcome">Willkommen im Home-Bereich!</string>
+    <string name="led_on">LED ist AN</string>
+    <string name="led_off">LED ist AUS</string>
+
+    <!-- Sensor Screen -->
+    <string name="label_current_temp">Aktuelle Temperatur:</string>
+    <string name="label_active_sensors">Aktive Sensoren:</string>
+    <string name="btn_add_sensor">Hinzufügen</string>
+    <string name="hint_new_sensor">Neuer Sensor Name</string>
+    <string name="desc_remove_sensor">Entfernen</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_header">Einstellungen</string>
+    <string name="btn_set_temp">Temperatur festlegen</string>
+    <string name="btn_start_chain">Prozess starten</string>
+    <string name="settings_placeholder">Hier können später Einstellungen stehen.</string>
+    <string name="label_select_color">LED Farbe auswählen:</string>
+
+    <!-- Temperature Dialog -->
+    <string name="dialog_title_temp">Temperatur anpassen</string>
+    <string name="dialog_msg_temp">Geben Sie den neuen Wert für die Temperatur ein:</string>
+    <string name="label_temp">Temperatur</string>
+    <string name="btn_save">Speichern</string>
+    <string name="btn_cancel">Abbrechen</string>
+
+    <!-- Step Screens -->
+    <string name="btn_next">Weiter</string>
+    <string name="btn_finish">Fertigstellen</string>
+    <string name="content_step1">Dies ist der erste Schritt in der Kette.</string>
+    <string name="content_step2">Gut gemacht! Dies ist Schritt zwei.</string>
+    <string name="content_step3">Fast geschafft! Dies ist der letzte Schritt.</string>
+    <string name="back_description">Zurück</string>
+</resources>
