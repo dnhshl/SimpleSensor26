@@ -20,7 +20,15 @@
     <string name="format_xyz">X: %.2f\nY: %.2f\nZ: %.2f</string>
 
     <!-- GPS Screen -->
-    <string name="gps_placeholder">GPS Daten werden hier später implementiert.</string>
+    <string name="label_gps_active">GPS Standort aktiv</string>
+    <string name="label_latitude">Breitengrad (Lat): %.6f</string>
+    <string name="label_longitude">Längengrad (Lon): %.6f</string>
+
+    <!-- Permission Management -->
+    <string name="permission_required_title">Berechtigung benötigt</string>
+    <string name="permission_required_msg">Diese Funktion benötigt Zugriff auf Ihren Standort, um GPS-Daten anzuzeigen.</string>
+    <string name="btn_grant_permission">Berechtigung erteilen</string>
+    <string name="permission_denied_msg">Der Zugriff wurde verweigert. Bitte aktivieren Sie den Standort in den Einstellungen.</string>
 
     <string name="back_description">Zurück</string>
 </resources>

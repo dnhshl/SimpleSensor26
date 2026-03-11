@@ -1,69 +1,74 @@
-# MultiScreenStarter App
+# 📱 SimpleSensor Educational App
 
-This project is a starter template for Android applications built with Jetpack Compose. It is designed to help students learn how to manage navigation, state, and data persistence in a structured way.
+Welcome to the **SimpleSensor** project! This is a specialized version of our standard Android Starter Template, designed specifically for your first steps into **Mobile Sensing** and **Hardware Interaction**.
 
-## 🏁 How to start your own project from this template
-
-To avoid the "it's too cumbersome to rename everything" hurdle, this template uses a generic package name: `com.example.main`. You can keep this package name in your code files to save time, and only change the "external" identity of your app.
-
-### Scenario A: You are using GitHub
-1.  **Use the Template**: Click the green **"Use this template"** button on GitHub (or **Fork** the repository).
-2.  **Clone**: Clone your new repository to your computer.
-3.  **Open**: Start Android Studio and select **"Open"**, then navigate to your cloned folder.
-
-### Scenario B: You are not using Git (ZIP Download)
-1.  **Download**: Click the **"Code"** button on GitHub and select **"Download ZIP"**.
-2.  **Extract**: Unzip the file to a folder on your computer.
-3.  **Open**: Start Android Studio and select **"Open"**, then navigate to your extracted folder.
-
-### 🛠️ Required Adjustments (Do this first!)
-Once the project is open in Android Studio, perform these two steps to make the app your own:
-1.  **Change the Display Name**: 
-    *   Open `app/src/main/res/values/strings.xml`.
-    *   Change `<string name="app_name">MultiScreenStarter</string>` to your desired app name (e.g., `"MyAwesomeApp"`).
-2.  **Change the Application ID**: 
-    *   Open `app/build.gradle.kts` (the one inside the `app` folder).
-    *   Find `applicationId = "com.example.main"`.
-    *   Change it to something unique, like `"com.yourname.projectname"`. 
-    *   *Note: This allows you to install your app alongside the original template on the same phone.*
-3.  **Sync**: Click the **"Sync Now"** bar that appears at the top of the editor.
+## 🎓 The "Discovery" Approach
+Instead of building this app step-by-step, we are using a **"Reverse Engineering"** approach:
+1.  **Explore**: You receive a fully functional app that talks to your phone's hardware.
+2.  **Understand**: Your goal is to trace the data from the hardware sensor, through the Repository and ViewModel, and finally to the UI.
+3.  **Modify**: Once you understand the flow, your task will be to add new sensors (e.g., Light, Pressure) or expand the GPS data (e.g., Altitude, Speed).
 
 ---
 
-## 🚀 How to use this Starter Template
+## 🏗️ Architecture: The Data Pipeline
+To keep the code clean and professional, we follow a simple 3-layer pipeline. Think of it like an Arduino project with a specialized library:
 
-### 1. Adding a new Screen
-To add a new screen to your app:
-1.  **Create the UI**: Create a new file in `ui/screens/` (e.g., `MyNewScreen.kt`) and define a `@Composable` function that takes the `AppViewModel` as an argument.
-2.  **Define the ID**: Open `AppConfig.kt` and add a new `object` to the `Screen` interface.
-3.  **Configure it**: Add a `ScreenConfig` entry to the `AppScreenConfigs` list in `AppConfig.kt`. Here you decide:
-    *   What the title in the Top Bar should be.
-    *   If it should show the Bottom Navigation Bar (`showBottomBar`).
-    *   If it should appear as a Tab in the Bottom Bar (by adding a `label` and `icons`).
-4.  **Map the UI**: In `MainActivity.kt`, add your new screen to the `when` block inside `NavDisplay`.
+### 1. The Repository (The "Driver")
+*   **Location**: `com.example.main.repositories`
+*   **Purpose**: This layer talks directly to the Android System and the hardware. 
+*   **Concept**: It provides a **`Flow`** of data. A `Flow` is like a continuous stream—every time the sensor moves, a new value is pushed into the stream.
+*   **Key Files**: `SensorRepository.kt`, `LocationRepository.kt`.
 
-### 2. Managing State (Data)
-There are two ways to store data in this app, defined in `UiState.kt`:
+### 2. The ViewModel (The "Brain")
+*   **Location**: `com.example.main.statemgmt.AppViewModel`
+*   **Purpose**: This is the central "Loop". It collects data from the Repositories and stores it in the `UiState`.
+*   **Concept**: In the `init { ... }` block, we launch coroutines (background tasks) that "collect" the sensor streams and update our variables.
 
-*   **UiState (Volatile/Temporary)**: Use this for data that only matters during the current session (e.g., is a light currently on?). This data is lost when the app is closed.
-    *   *To add a variable*: Add it to the `UiState` data class.
-    *   *To update it*: Add a function in `AppViewModel.kt` that uses `_uiState.update { it.copy(...) }`.
-*   **PersistantUiState (Permanent)**: Use this for data that should be remembered (e.g., user settings, high scores). This is saved to the phone's storage.
-    *   *To add a variable*: Add it to the `PersistantUiState` data class.
-    *   *To update it*: Add a function in `AppViewModel.kt` that uses `dataStoreManager.updatePersistantState { it.copy(...) }`.
+### 3. The UI (The "Display")
+*   **Location**: `com.example.main.ui.screens`
+*   **Purpose**: Purely for displaying data. 
+*   **Concept**: We use a **"Wrapper" pattern**. 
+    *   **Screen function**: Handles the connection to the ViewModel.
+    *   **Content function**: A "pure" view that only knows how to draw a `UiState`.
+    *   **PermissionWrapper**: A special gatekeeper for sensitive data like GPS.
 
-### 3. Handling Navigation
-Navigation is handled centrally in the `AppViewModel.kt`:
-*   Use `navigateTo(Screen.YourScreen)` for main tabs (clears the back history).
-*   Use `push(Screen.YourScreen)` for sub-pages or "chains" of screens.
-*   The **System Back Button** is handled automatically in `MainActivity.kt`.
+---
 
-## 📁 Project Structure
+## 🔒 Permission Management
+For the first time, you will encounter **Android Permissions**. 
+*   **Manifest**: We must declare our intent to use GPS in the `AndroidManifest.xml`.
+*   **Just-In-Time**: We only ask the user for permission when they actually open the GPS tab.
+*   **The Component**: Check out `PermissionWrapper.kt` to see how we handle the "Allow/Deny" dialog automatically.
 
-*   `MainActivity.kt`: The main entry point. Handles the Scaffold (TopBar/BottomBar) and the navigation display.
-*   `statemgmt/`:
-    *   `AppViewModel.kt`: The "Brain" of your app. Write your logic and actions here.
-    *   `UiState.kt`: Defines what data your app holds. Add your variables here.
-    *   `DataStoreManager.kt` & `Helper.kt`: Handle background saving logic. **You don't need to touch these.**
-*   `ui/screens/`: Contains all your UI files.
-*   `res/values/strings.xml`: All text used in the app. **Never hardcode text in the UI; add it here instead.**
+---
+
+## 🛠️ Your Tasks
+
+### Task 1: Add a new Hardware Sensor
+Currently, we read the Accelerometer and Gyroscope. 
+1.  Open `UiState.kt` and add a new variable (e.g., `val lightLevel: Float = 0f`).
+2.  In `AppViewModel.kt`, start collecting `Sensor.TYPE_LIGHT` from the repository.
+3.  Display the value in the `HomeScreen.kt`.
+
+### Task 2: Expand GPS Data
+The `Location` object contains more than just Latitude and Longitude.
+1.  Can you find out how to get the **Altitude** (Height) or the **Speed**?
+2.  Add these to the `UiState` and display them in the `GpsScreen`.
+
+### Task 3: Visual Feedback
+In `GyroScreen.kt`, we change the background color based on tilt. 
+1.  Try to change the color based on the **Z-Axis** instead.
+2.  Can you make a "Level" (Wasserwaage) indicator using a `Box` that moves across the screen?
+
+---
+
+## 📁 Project Quick-Link
+*   **Logic**: `AppViewModel.kt` -> Where the data is gathered.
+*   **Data Structure**: `UiState.kt` -> Where the data is defined.
+*   **Hardware Control**: `repositories/` -> Where the hardware is accessed.
+*   **UI Layout**: `ui/screens/` -> Where the screens are designed.
+
+---
+
+## ⚖️ License
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute this code in your own projects. See the `LICENSE` file for details.

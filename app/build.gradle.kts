@@ -64,4 +64,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.play.services.location)
 }

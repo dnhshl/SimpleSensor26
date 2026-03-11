@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.example.main.repositories.LocationRepository
 import com.example.main.repositories.SensorRepository
 import com.example.main.ui.screens.Screen
 import kotlinx.coroutines.flow.*
@@ -20,6 +21,7 @@ class AppViewModel(application: Application, private val savedStateHandle: Saved
 
     private val dataStoreManager = DataStoreManager(application)
     private val sensorRepository = SensorRepository(application)
+    private val locationRepository = LocationRepository(application)
 
     // --- 1. UI STATE (Memory only) ---
     private val _uiState = MutableStateFlow(UiState())
@@ -57,6 +59,17 @@ class AppViewModel(application: Application, private val savedStateHandle: Saved
                         gyroX = event.values[0],
                         gyroY = event.values[1],
                         gyroZ = event.values[2]
+                    )}
+                }
+        }
+
+        // Start listening to GPS Location
+        viewModelScope.launch {
+            locationRepository.getLocationUpdates()
+                .collect { location ->
+                    _uiState.update { it.copy(
+                        latitude = location.latitude,
+                        longitude = location.longitude
                     )}
                 }
         }
