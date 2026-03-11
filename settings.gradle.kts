@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MultiScreenStarter"
+rootProject.name = "SimpleSensor26"
 include(":app")
  

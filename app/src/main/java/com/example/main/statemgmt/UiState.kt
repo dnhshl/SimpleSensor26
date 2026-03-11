@@ -1,35 +1,34 @@
 package com.example.main.statemgmt
 
+import android.hardware.Sensor
 import androidx.compose.ui.graphics.Color
 import kotlinx.serialization.Serializable
 
 /**
  * 1. UI STATE (Volatile)
- * 
- * These variables are kept in memory. They survive if you rotate the phone,
- * but they are RESET to their default values if the app is fully closed and restarted.
- * 
- * To add a new "temporary" variable, add it to this data class.
  */
 data class UiState(
-    val selectedTabIndex: Int = 0,
-    val temperature: Float = 23.5f,
-    val isLedOn: Boolean = false
+    // Home Screen
+    val availableSensors: List<Sensor> = emptyList(),
+    
+    // Gyro & Accel Screen
+    val accelX: Float = 0f,
+    val accelY: Float = 0f,
+    val accelZ: Float = 0f,
+    val gyroX: Float = 0f,
+    val gyroY: Float = 0f,
+    val gyroZ: Float = 0f,
+
+    // GPS Screen
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
 )
 
 /**
  * 2. PERSISTENT UI STATE (Saved to Disk)
- * 
- * These variables are saved in the phone's storage. They survive app restarts
- * and even phone reboots.
- * 
- * To add a new "permanent" variable, add it here.
- * If you use a complex type (like Color), you must specify a serializer.
  */
 @Serializable
 data class PersistantUiState(
-    val numClicks: Int = 0,
-    @Serializable(with = ColorSerializer::class)  // Custom Serializer defined in Helper.kt
-    val myColor: Color = Color.Blue,
-    val sensorItems: List<String> = listOf("Helligkeit", "Luftfeuchtigkeit")
+    // Keep the structure, but we don't need the template data anymore
+    val lastUsedTimestamp: Long = 0L
 )

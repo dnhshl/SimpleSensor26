@@ -1,60 +1,57 @@
 package com.example.main.ui.screens
 
-import com.example.main.statemgmt.AppViewModel
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.main.R
+import com.example.main.statemgmt.AppViewModel
 
 /**
- * The Home Screen of your app.
- * It demonstrates how to observe both temporary and persistent data.
+ * Sensor Home Screen.
+ * Displays a list of all hardware sensors available on the phone.
  */
 @Composable
 fun HomeScreen(viewModel: AppViewModel) {
-    // We observe both states: persistent (DataStore) and temporary (ViewModel memory)
     val state by viewModel.uiState.collectAsState()
-    val persistentState by viewModel.persistantUiState.collectAsState()
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Text(
-            text = stringResource(R.string.home_welcome),
-            style = MaterialTheme.typography.headlineSmall
+            text = stringResource(R.string.label_sensor_list),
+            style = MaterialTheme.typography.titleMedium
         )
         
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        // The LED: A colored box
-        // If 'isLedOn' is false, we show a dark gray (off state)
-        // If it is true, we use the 'myColor' stored in the persistent state
-        val ledColor = if (state.isLedOn) persistentState.myColor else Color.DarkGray
-        
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(ledColor)
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // This button triggers an action in the ViewModel to toggle the LED
-        Button(onClick = { viewModel.toggleLed() }) {
-            Text(
-                text = if (state.isLedOn) stringResource(R.string.led_on) else stringResource(R.string.led_off)
-            )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(state.availableSensors) { sensor ->
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(text = sensor.name, style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            text = "Vendor: ${sensor.vendor}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
         }
     }
 }

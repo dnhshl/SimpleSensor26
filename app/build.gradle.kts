@@ -11,7 +11,7 @@ configure<ApplicationExtension> {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.main"
+        applicationId = "com.example.simplesensor26"
         minSdk = 30
         targetSdk = 35
         versionCode = 1
